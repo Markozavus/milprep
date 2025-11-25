@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}התחברות – נתיב ליחידה{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="container">
+        <h1 class="form-title">התחברות למערכת</h1>
+
+        <p class="form-subtitle">
+            הכנס/י את שם המשתמש והסיסמה שלך כדי להיכנס למערכת ההתאמה ליחידות צה״ל.
+        </p>
+
+        {% if error %}
+            <div class="form-success" style="border-color: #ff6b81; background: rgba(255, 107, 129, 0.06); color: #ff6b81;">
+                <strong>שם משתמש או סיסמה לא נכונים ❌</strong>
+            </div>
+        {% endif %}
+
+        <form class="register-form" method="post" action="{{ url_for('login') }}">
+            <div class="form-grid">
+                <div class="form-group full-width">
+                    <label for="full_name">
+                        שם משתמש
+                        <span class="required-star">*</span>
+                    </label>
+                    <!-- שיניתי את שם השדה מ-"username" ל-"full_name" כך שיתאים לשם המשתמש ב-Flask -->
+                    <input type="text" id="full_name" name="full_name" required placeholder="לדוגמה: noah123">
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="password">
+                        סיסמה
+                        <span class="required-star">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" required placeholder="לפחות 6 תווים">
+                </div>
+            </div>
+
+            <div class="form-footer-row">
+                <div class="form-note">
+                    <span class="required-star">*</span>
+                    <span>שדות חובה להתחברות.</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">
+                    התחבר
+                </button>
+                <a href="{{ url_for('register') }}" class="btn secondary-btn">
+                    הרשמה ראשונית
+                </a>
+                <a href="{{ url_for('home') }}" class="btn secondary-btn">
+                    חזרה לדף הבית
+                </a>
+            </div>
+        </form>
+        
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}בחירת קטגוריה{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="container">
+
+        <h1 class="form-title">בחירת קטגוריה ראשונית</h1>
+        <p class="form-subtitle">
+            בחר בתחום בו תרצה לעסוק בשירותך הצבאי.
+        </p>
+
+        <form method="post">
+
+            <div class="register-form">
+
+                <div class="form-group full-width">
+                    <label>
+                        קטגוריה <span class="required-star">*</span>
+                    </label>
+
+                    <div class="category-select">
+
+                        <label class="category-option" required>
+                            <input type="radio" name="category" value="combat" required>
+                            <span class="icon">⚔️</span>
+                            <span class="text">לוחמה</span>
+                        </label>
+
+                        <label class="category-option">
+                            <input type="radio" name="category" value="technology">
+                            <span class="icon">🛡️</span>
+                            <span class="text">תומכי לחימה</span>
+                        </label>
+
+                        <label class="category-option">
+                            <input type="radio" name="category" value="intelligence">
+                            <span class="icon">💻</span>
+                            <span class="text">טכנולוגיה</span>
+                        </label>
+
+                        <label class="category-option">
+                            <input type="radio" name="category" value="medicine">
+                            <span class="icon">📞</span>
+                            <span class="text">תקשורת</span>
+                        </label>
+
+                        <label class="category-option">
+                            <input type="radio" name="category" value="education">
+                            <span class="icon">⚙️</span>
+                            <span class="text">לוגיסטיקה</span>
+                        </label>
+
+                    </div>
+                </div>
+
+            </div>
+
+            <button type="submit" class="btn primary-btn" style="margin-top: 1.4rem;">
+                לשלב הבא
+            </button>
+
+        </form>
+
+    </div>
+</section>
+{% endblock %}

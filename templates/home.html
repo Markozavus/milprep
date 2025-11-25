@@ -3,6 +3,7 @@
 {% block title %}דף הבית – נתיב ליחידה{% endblock %}
 
 {% block content %}
+
 <section class="hero-section">
     <div class="container hero-inner">
         <div class="hero-text">
@@ -18,8 +19,8 @@
             </p>
 
             <div class="hero-buttons">
-                <a href="{{ url_for('main_page') }}" class="btn primary-btn">
-                    מעבר לעמוד הראשי
+                <a href="{{ url_for('login') }}" class="btn primary-btn">
+                    התחברות
                 </a>
                 <a href="{{ url_for('register') }}" class="btn secondary-btn">
                     התחלת הרשמה מותאמת אישית
@@ -41,9 +42,9 @@
 
 <section class="reviews-section">
     <div class="container">
-        <h2 class="section-title">מה המשתמשים שלנו אומרים</h2>
+        <h2 class="section-title">האתר בנוי לזכרו של סמל ריף הרוש ז"ל</h2>
         <p class="section-subtitle">
-            חוות דעת אמיתיות של מי שכבר השתמש/ה באתר והתקבל/ה ליחידות מובילות.
+            הנה כמה מהציטוטים שלו
         </p>
 
         <div class="reviews-slider" id="reviews-slider">
@@ -52,7 +53,7 @@
                     <div class="review-text">“{{ review.text }}”</div>
                     <div class="review-meta">
                         <span class="review-name">{{ review.name }}</span>
-                        <span class="review-unit">יחידה: {{ review.unit }}</span>
+                        <span class="review-unit"> {{ review.unit }}</span>
                     </div>
                 </article>
             {% endfor %}
