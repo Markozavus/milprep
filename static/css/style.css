@@ -529,4 +529,70 @@ a {
 
 
 
+/* ====== בחירת קטגוריה ====== */
 
+.category-select {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 1rem;
+    margin-top: 0.6rem;
+}
+
+.category-option {
+    background: rgba(10, 14, 28, 0.96);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    padding: 1.1rem 0.8rem;
+    border-radius: 1rem;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    align-items: center;
+    transition: border-color 0.25s, box-shadow 0.25s, transform 0.15s, background 0.25s;
+    user-select: none;
+}
+
+.category-option:hover {
+    border-color: #21e6b6;
+    box-shadow: 0 0 0 1px rgba(33, 230, 182, 0.4);
+    transform: translateY(-3px);
+}
+
+.category-option input {
+    display: none;
+}
+
+.category-option .icon {
+    font-size: 1.65rem;
+    opacity: 0.9;
+}
+
+.category-option .text {
+    font-size: 0.95rem;
+}
+
+/* בחירה */
+
+.category-option input:checked ~ * {
+    background: linear-gradient(120deg, #3cb9ff, #15e0b9);
+    padding: 0.4rem 0.6rem;
+    border-radius: 0.7rem;
+    font-weight: 600;
+    color: #02040a;
+}
+
+.category-option input:checked ~ .icon {
+    filter: drop-shadow(0 0 8px rgba(33, 230, 182, 0.55));
+}
+
+
+
+
+
+.form-page {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    padding: 3rem 0;
+    background: radial-gradient(circle at top, rgba(32, 190, 255, 0.12), rgba(5, 7, 18, 0.96));
+}

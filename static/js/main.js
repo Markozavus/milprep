@@ -17,7 +17,7 @@ document.addEventListener("DOMContentLoaded", () => {
         currentIndex = index;
     }
 
-    // אוטומטי
+    // אוטומטיד
     let sliderInterval = setInterval(() => {
         const nextIndex = (currentIndex + 1) % cards.length;
         showReview(nextIndex);
