@@ -1,0 +1,158 @@
+{% extends "base.html" %}
+
+{% block title %}הרשמה – נתיב ליחידה{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="container">
+        <h1 class="form-title">הרשמה ראשונית למערכת ההתאמה ליחידות צה״ל</h1>
+        <p class="form-subtitle">
+            מלא/י את הפרטים כדי שנוכל בהמשך להמליץ לך על יחידות מתאימות, קורסי הכנה וכישורים שכדאי לחזק.
+        </p>
+
+        <!-- סרגל שלבים קטן למראה מקצועי -->
+        <div class="form-steps">
+            <div class="step active">
+                <div class="step-circle">1</div>
+                <div class="step-label">פרטי בסיס</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">2</div>
+                <div class="step-label">התאמה ליחידות</div>
+            </div>
+            <div class="step">
+                <div class="step-circle">3</div>
+                <div class="step-label">המלצות וקורסים</div>
+            </div>
+        </div>
+
+        {% if success %}
+            <div class="form-success">
+                <strong>ההרשמה הראשונית נקלטה ✔</strong>
+                <p>
+                    בשלב הבא נוסיף מנוע המלצות שיציע עבורך יחידות וקורסים מותאמים אישית לפי הנתונים שמילאת.
+                </p>
+            </div>
+        {% endif %}
+
+        <form class="register-form" method="post" action="{{ url_for('register') }}">
+            <div class="form-grid">
+                <!-- פרטים בסיסיים -->
+                <div class="form-group">
+                    <label for="full_name">
+                        שם מלא
+                        <span class="required-star">*</span>
+                    </label>
+                    <input type="text" id="full_name" name="full_name" required placeholder="לדוגמה: נועה כהן">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">
+                        דוא״ל
+                        <span class="required-star">*</span>
+                    </label>
+                    <input type="email" id="email" name="email" required placeholder="example@mail.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="password">
+                        סיסמה 
+                        <span class="required-star">*</span>
+                    </label>
+                    <input type="password" id="password" name="password" required minlength="6"
+                        placeholder="לפחות 6 תווים">
+                </div>
+
+                <div class="form-group">
+                    <label for="age">
+                        גיל
+                        <span class="required-star">*</span>
+                    </label>
+                    <input type="number" id="age" name="age" min="16" max="30" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="gender">מגדר</label>
+                    <select id="gender" name="gender">
+                        <option value="">בחר/י</option>
+                        <option value="male">זכר</option>
+                        <option value="female">נקבה</option>
+                        <option value="other">אחר</option>
+                        <option value="na">מעדיפ/ה לא לציין</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="height">גובה (בס״מ)</label>
+                    <input type="number" id="height" name="height" min="120" max="220">
+                </div>
+
+                <div class="form-group">
+                    <label for="weight">משקל (בק״ג)</label>
+                    <input type="number" id="weight" name="weight" min="40" max="160">
+                </div>
+
+                <div class="form-group">
+                    <label for="fitness_level">רמת כושר נוכחית</label>
+                    <select id="fitness_level" name="fitness_level">
+                        <option value="">בחר/י</option>
+                        <option value="low">נמוכה</option>
+                        <option value="medium">בינונית</option>
+                        <option value="high">גבוהה</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="skills">כישורים ותחומי חוסקה</label>
+                    <textarea id="skills" name="skills" rows="3"
+                              placeholder="לדוגמה: ריצה למרחקים, סיבולת לב-ריאה, אנגלית ברמה גבוהה, מחשבים, חשיבה אנליטית..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="health_issues">בעיות / הגבלות רפואיות</label>
+                    <textarea id="health_issues" name="health_issues" rows="3"
+                              placeholder="אם יש בעיות גב, ברכיים, נשימה, אלרגיות קשות, ניתוחים קודמים וכו'. אם אין – אפשר לכתוב ״אין״."></textarea>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="target_unit">לאיזו יחידה היית רוצה לכוון (אם יש לך כיוון ראשוני)?</label>
+                    <select id="target_unit" name="target_unit">
+                        <option value="">אני עדיין לא יודע/ת</option>
+                        <option value="8200">יחידת 8200 (מודיעין טכנולוגי)</option>
+                        <option value="lotem">לוט״ם / יחידות תקשוב</option>
+                        <option value="air_force">חיל האוויר</option>
+                        <option value="navy">חיל הים</option>
+                        <option value="golani">חטיבת גולני / סיירות חי״ר</option>
+                        <option value="paratroopers">חטיבת הצנחנים</option>
+                        <option value="armored">חיל השריון</option>
+                        <option value="intelligence">מודיעין שדה / איסוף</option>
+                        <option value="other">יחידה אחרת (ארשום בטקסט חופשי)</option>
+                    </select>
+                </div>
+
+                <div class="form-group full-width">
+                    <label for="unit_free_text">הערות / יחידות ספציפיות שמעניינות אותך</label>
+                    <textarea id="unit_free_text" name="unit_free_text" rows="3"
+                              placeholder="לדוגמה: מתעניינ/ת ביחידות סייבר, יחידות מודיעין טכנולוגי, או בסיירות מסוימות."></textarea>
+                </div>
+            </div>
+
+            <div class="form-footer-row">
+                <div class="form-note">
+                    <span class="required-star">*</span>
+                    <span>שדות חובה לצורך התאמה מדויקת.</span>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn primary-btn">
+                    שליחה ושמירת פרטים
+                </button>
+                <a href="{{ url_for('home') }}" class="btn secondary-btn">
+                    חזרה לדף הבית
+                </a>
+            </div>
+        </form>
+    </div>
+</section>
+{% endblock %}

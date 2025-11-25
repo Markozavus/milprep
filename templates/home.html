@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}דף הבית – נתיב ליחידה{% endblock %}
+
+{% block content %}
+<section class="hero-section">
+    <div class="container hero-inner">
+        <div class="hero-text">
+            <h1>נתיב ליחידה – הדרך החכמה להכנה לצה״ל</h1>
+            <p>
+                האתר נועד לעזור למי שרוצה להתכונן ליחידות בצה״ל – מהמודיעין והטכנולוגיה ועד ליחידות קרביות.
+                במהלך ההרשמה המערכת אוספת מידע על גיל, משקל, גובה, כישורים, מצב רפואי והעדפות – וממליצה לך
+                על מסלולי הכנה וקורסים שמתאימים בדיוק לך.
+            </p>
+            <p>
+                אם את/ה עדיין לא בטוח/ה לאיזה תפקיד או יחידה לכוון – המערכת תציע עבורך יחידות מתאימות
+                ותסביר אילו כישורים נדרשים לכל מסלול, כולל ביקורות אמיתיות של מי שכבר שירת/ה שם.
+            </p>
+
+            <div class="hero-buttons">
+                <a href="{{ url_for('main_page') }}" class="btn primary-btn">
+                    מעבר לעמוד הראשי
+                </a>
+                <a href="{{ url_for('register') }}" class="btn secondary-btn">
+                    התחלת הרשמה מותאמת אישית
+                </a>
+            </div>
+        </div>
+
+        <div class="hero-side-card">
+            <h2>למי זה מתאים?</h2>
+            <ul>
+                <li>מלש״בים שלא בטוחים לאן לכוון</li>
+                <li>מי שרוצה לדעת אילו כישורים נדרשים לכל יחידה</li>
+                <li>מי שמעדיפ/ה הכנה מסודרת ולא לנחש לבד</li>
+                <li>מי שמחפש/ת חוות דעת אמיתיות מחיילים וחיילות</li>
+            </ul>
+        </div>
+    </div>
+</section>
+
+<section class="reviews-section">
+    <div class="container">
+        <h2 class="section-title">מה המשתמשים שלנו אומרים</h2>
+        <p class="section-subtitle">
+            חוות דעת אמיתיות של מי שכבר השתמש/ה באתר והתקבל/ה ליחידות מובילות.
+        </p>
+
+        <div class="reviews-slider" id="reviews-slider">
+            {% for review in reviews %}
+                <article class="review-card{% if loop.first %} active{% endif %}">
+                    <div class="review-text">“{{ review.text }}”</div>
+                    <div class="review-meta">
+                        <span class="review-name">{{ review.name }}</span>
+                        <span class="review-unit">יחידה: {{ review.unit }}</span>
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
+
+        <div class="reviews-dots" id="reviews-dots">
+            {% for review in reviews %}
+                <button class="dot{% if loop.first %} active{% endif %}" data-index="{{ loop.index0 }}"></button>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock %}

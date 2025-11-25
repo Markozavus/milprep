@@ -1,0 +1,532 @@
+/* בסיס כללי */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Rubik", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    background: radial-gradient(circle at top right, #1b2735, #090a0f 55%);
+    color: #f8f9fb;
+    direction: rtl;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+.container {
+    width: min(1100px, 92%);
+    margin: 0 auto;
+}
+
+/* Header */
+
+.site-header {
+    background: rgba(6, 10, 20, 0.9);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    backdrop-filter: blur(10px);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.7rem 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.logo-icon {
+    font-size: 1.3rem;
+}
+
+.main-nav {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.95rem;
+}
+
+.main-nav a {
+    padding: 0.4rem 0.7rem;
+    border-radius: 999px;
+    transition: background 0.2s, color 0.2s, transform 0.15s;
+}
+
+.main-nav a:hover {
+    background: rgba(255, 255, 255, 0.08);
+    transform: translateY(-1px);
+}
+
+.language-switcher {
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+    font-size: 0.85rem;
+}
+
+.language-switcher select {
+    background: transparent;
+    border-radius: 999px;
+    border: 1px solid rgba(255, 255, 255, 0.25);
+    color: #f8f9fb;
+    padding: 0.2rem 0.6rem;
+}
+
+/* Hero Section */
+
+.hero-section {
+    padding: 3rem 0 2rem;
+}
+
+.hero-inner {
+    display: grid;
+    grid-template-columns: minmax(0, 3fr) minmax(0, 2fr);
+    gap: 2rem;
+    align-items: stretch;
+}
+
+.hero-text h1 {
+    font-size: clamp(2rem, 3vw, 2.6rem);
+    margin-bottom: 1rem;
+}
+
+.hero-text p {
+    margin: 0.4rem 0;
+    line-height: 1.7;
+    color: rgba(245, 247, 252, 0.9);
+}
+
+.hero-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-top: 1.4rem;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.6rem 1.35rem;
+    border-radius: 999px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: transform 0.15s, box-shadow 0.15s, background 0.2s, color 0.2s;
+}
+
+.primary-btn {
+    background: linear-gradient(120deg, #3cb9ff, #15e0b9);
+    color: #02040a;
+    box-shadow: 0 10px 25px rgba(9, 222, 203, 0.4);
+}
+
+.primary-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 35px rgba(9, 222, 203, 0.5);
+}
+
+.secondary-btn {
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    color: #f8f9fb;
+}
+
+.secondary-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+}
+
+/* Side card */
+
+.hero-side-card {
+    background: radial-gradient(circle at top, rgba(61, 197, 255, 0.26), rgba(3, 4, 8, 0.95));
+    border-radius: 1.3rem;
+    padding: 1.2rem 1.3rem;
+    box-shadow: 0 16px 40px rgba(0, 0, 0, 0.45);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.hero-side-card h2 {
+    font-size: 1.15rem;
+    margin-top: 0;
+    margin-bottom: 0.7rem;
+}
+
+.hero-side-card ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.hero-side-card li {
+    margin: 0.4rem 0;
+    padding-right: 0.9rem;
+    position: relative;
+    font-size: 0.95rem;
+}
+
+.hero-side-card li::before {
+    content: "•";
+    position: absolute;
+    right: 0;
+    color: #21e6b6;
+}
+
+/* Reviews Section */
+
+.reviews-section {
+    padding: 2rem 0 3rem;
+    background: linear-gradient(to bottom, rgba(0, 0, 0, 0.1), rgba(5, 8, 20, 0.95));
+}
+
+.section-title {
+    text-align: center;
+    font-size: 1.6rem;
+    margin-bottom: 0.3rem;
+}
+
+.section-subtitle {
+    text-align: center;
+    font-size: 0.95rem;
+    color: rgba(240, 242, 250, 0.8);
+    margin-top: 0;
+    margin-bottom: 1.4rem;
+}
+
+.reviews-slider {
+    position: relative;
+    max-width: 700px;
+    margin: 0 auto;
+    min-height: 180px;
+}
+
+.review-card {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transform: translateX(20px);
+    transition: opacity 0.55s ease, transform 0.55s ease;
+    background: radial-gradient(circle at top right, rgba(60, 184, 255, 0.14), rgba(8, 8, 18, 0.95));
+    border-radius: 1.1rem;
+    padding: 1.2rem 1.5rem;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.review-card.active {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.review-text {
+    font-size: 1rem;
+    line-height: 1.8;
+}
+
+.review-meta {
+    margin-top: 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.7rem;
+    font-size: 0.9rem;
+    color: rgba(210, 214, 230, 0.95);
+}
+
+.review-name {
+    font-weight: 500;
+}
+
+.review-unit {
+    padding: 0.1rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(39, 199, 171, 0.16);
+    border: 1px solid rgba(39, 199, 171, 0.5);
+}
+
+/* Dots */
+
+.reviews-dots {
+    margin-top: 1.8rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.45rem;
+}
+
+.reviews-dots .dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 999px;
+    border: none;
+    background: rgba(255, 255, 255, 0.3);
+    cursor: pointer;
+    padding: 0;
+    transition: width 0.2s, background 0.2s, transform 0.15s;
+}
+
+.reviews-dots .dot.active {
+    width: 22px;
+    background: linear-gradient(120deg, #3cb9ff, #15e0b9);
+    transform: translateY(-1px);
+}
+
+/* Footer */
+
+.site-footer {
+    border-top: 1px solid rgba(255, 255, 255, 0.09);
+    padding: 0.8rem 0 1rem;
+    background: #050713;
+    font-size: 0.85rem;
+}
+
+.footer-inner {
+    text-align: center;
+    color: rgba(210, 213, 226, 0.9);
+}
+
+/* רספונסיביות */
+
+@media (max-width: 850px) {
+    .hero-inner {
+        grid-template-columns: 1fr;
+    }
+
+    .hero-side-card {
+        order: -1;
+    }
+
+    .header-inner {
+        flex-wrap: wrap;
+        gap: 0.5rem 1rem;
+    }
+
+    .main-nav {
+        font-size: 0.85rem;
+        flex-wrap: wrap;
+    }
+}
+
+@media (max-width: 500px) {
+    .hero-text h1 {
+        font-size: 1.6rem;
+    }
+
+    .review-card {
+        padding: 1rem 1.1rem;
+    }
+}
+
+/* ========== Registration / Form Page ========== */
+
+.form-page {
+    padding: 3rem 0 3.5rem;
+    background: radial-gradient(circle at top, rgba(32, 190, 255, 0.12), rgba(5, 7, 18, 0.96));
+}
+
+.form-page .container {
+    max-width: 900px;
+}
+
+/* כותרת + תיאור */
+
+.form-title {
+    font-size: 1.7rem;
+    margin-bottom: 0.4rem;
+    text-align: right;
+}
+
+.form-subtitle {
+    margin-top: 0;
+    margin-bottom: 1.6rem;
+    font-size: 0.96rem;
+    color: rgba(230, 234, 246, 0.85);
+    max-width: 720px;
+}
+
+/* סרגל שלבים עליון */
+
+.form-steps {
+    display: flex;
+    gap: 1.2rem;
+    margin-bottom: 1.4rem;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.step {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    opacity: 0.6;
+    transition: opacity 0.2s, transform 0.15s;
+}
+
+.step.active {
+    opacity: 1;
+    transform: translateY(-1px);
+}
+
+.step-circle {
+    width: 26px;
+    height: 26px;
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    font-weight: 600;
+    background: rgba(33, 230, 182, 0.16);
+    border: 1px solid rgba(33, 230, 182, 0.7);
+    box-shadow: 0 5px 15px rgba(33, 230, 182, 0.35);
+}
+
+.step-label {
+    font-size: 0.9rem;
+}
+
+/* כרטיס הטופס */
+
+.register-form {
+    margin-top: 0.6rem;
+    background: rgba(6, 10, 22, 0.96);
+    border-radius: 1.3rem;
+    padding: 1.6rem 1.8rem 1.9rem;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    box-shadow: 0 18px 40px rgba(0, 0, 0, 0.6);
+}
+
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.2rem 1.4rem;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    font-size: 0.92rem;
+}
+
+.form-group.full-width {
+    grid-column: 1 / -1;
+}
+
+.form-group label {
+    font-weight: 500;
+}
+
+.required-star {
+    color: #ff6b81;
+    margin-right: 0.25rem;
+    font-size: 0.85rem;
+}
+
+/* שדות הטופס */
+
+.register-form input,
+.register-form select,
+.register-form textarea {
+    background: rgba(10, 14, 28, 0.96);
+    border-radius: 0.7rem;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+    padding: 0.5rem 0.75rem;
+    color: #f8f9fb;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s, box-shadow 0.2s, background 0.2s, transform 0.1s;
+    resize: vertical;
+}
+
+.register-form input::placeholder,
+.register-form textarea::placeholder {
+    color: rgba(200, 204, 220, 0.7);
+}
+
+.register-form input:focus,
+.register-form select:focus,
+.register-form textarea:focus {
+    border-color: #21e6b6;
+    box-shadow: 0 0 0 1px rgba(33, 230, 182, 0.55);
+    background: rgba(12, 18, 36, 0.96);
+    transform: translateY(-1px);
+}
+
+/* הערת חובה + הודעת הצלחה */
+
+.form-footer-row {
+    margin-top: 1.1rem;
+    display: flex;
+    justify-content: flex-start;
+    font-size: 0.85rem;
+    color: rgba(230, 234, 246, 0.85);
+}
+
+.form-note {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    padding: 0.3rem 0.7rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.form-success {
+    margin-bottom: 1.3rem;
+    padding: 0.9rem 1rem;
+    border-radius: 0.9rem;
+    border: 1px solid rgba(40, 211, 176, 0.7);
+    background: rgba(40, 211, 176, 0.06);
+    font-size: 0.9rem;
+}
+
+/* כפתורי פעולה */
+
+.form-actions {
+    margin-top: 1.6rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.9rem;
+    justify-content: flex-start;
+}
+
+/* רספונסיביות */
+
+@media (max-width: 768px) {
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .register-form {
+        padding: 1.3rem 1.1rem 1.5rem;
+    }
+
+    .form-title {
+        font-size: 1.5rem;
+    }
+
+    .form-steps {
+        gap: 0.8rem;
+    }
+}
+
+
+
+
+
