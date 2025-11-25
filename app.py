@@ -1,14 +1,12 @@
-from flask import Flask, render_template, url_for, request
+from flask import Flask, render_template, url_for, request, session, redirect
 import sqlite3
 from datetime import datetime
 import os
-from werkzeug.security import generate_password_hash
-
 
 app = Flask(__name__)
+app.secret_key = "SUPER_SECRET_KEY_123"  # חובה לסשן
 
-# ---------- הגדרות בסיסיות ----------
-
+# ---------- Database ----------
 BASE_DIR = os.path.abspath(os.path.dirname(__file__))
 DB_PATH = os.path.join(BASE_DIR, "military_app.db")
 
@@ -26,41 +24,31 @@ def init_db():
             id INTEGER PRIMARY KEY AUTOINCREMENT,
             created_at TEXT NOT NULL,
             full_name TEXT,
-            email TEXT,
-            password_hash TEXT NOT NULL,
+            email TEXT UNIQUE,
+            password TEXT NOT NULL,
             age INTEGER,
             gender TEXT,
-            height_cm INTEGER,
-            weight_kg INTEGER,
-            fitness_level TEXT,
-            skills TEXT,
-            health_issues TEXT,
-            target_unit TEXT,
-            unit_free_text TEXT
+            category TEXT
         )
     """)
     conn.commit()
     conn.close()
 
 
-
-# ---------- ראוטים ----------
+# ---------- Routes ----------
 
 @app.route("/")
 def home():
-    newline = "\n"
     reviews = [
         {
             "name": "ריף הרוש ז''ל",
             "unit": "07.2003 - 06.2024",
-            "text": "לעשות חיים כל הזמן, לא לנוח" 
+            "text": "לעשות חיים כל הזמן, לא לנוח"
         },
         {
             "name": "ריף הרוש ז''ל",
             "unit": "07.2003 - 06.2024",
-            "text":     "למה אני מסכן את החיים שלי? עשו את זה לפניי ויעשו את זה אחריי, ובשביל אותה מבוגרת שאומרת לי תודה ובוכה. "
-
-
+            "text": "למה אני מסכן את החיים שלי? עשו את זה לפניי ויעשו את זה אחריי, ובשביל אותה מבוגרת שאומרת לי תודה ובוכה."
         },
         {
             "name": "ריף הרוש ז''ל",
@@ -76,80 +64,110 @@ def home():
     return render_template("home.html", reviews=reviews)
 
 
-@app.route("/main")
-def main_page():
-    return "<h1>עמוד ראשי (Main) – בקרוב</h1>"
-
-
 @app.route("/register", methods=["GET", "POST"])
 def register():
     if request.method == "POST":
         form = request.form
 
-        # יצירת hash לסיסמה
-        raw_password = form.get("password")
-        password_hash = generate_password_hash(raw_password) if raw_password else None
+        # תיקון: שמירת סיסמה בלי רווחים
+        password = form["password"].strip()
 
         conn = get_db_connection()
-        conn.execute("""
-            INSERT INTO registrations (
-                created_at,
-                full_name,
-                email,
-                password_hash,
-                age,
-                gender,
-                height_cm,
-                weight_kg,
-                fitness_level,
-                skills,
-                health_issues,
-                target_unit,
-                unit_free_text
-            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        cursor = conn.execute("""
+            INSERT INTO registrations
+            (created_at, full_name, email, password, age, gender)
+            VALUES (?, ?, ?, ?, ?, ?)
         """, (
             datetime.utcnow().isoformat(timespec="seconds"),
-            form.get("full_name"),
-            form.get("email"),
-            password_hash,
-            int(form.get("age")) if form.get("age") else None,
-            form.get("gender"),
-            int(form.get("height")) if form.get("height") else None,
-            int(form.get("weight")) if form.get("weight") else None,
-            form.get("fitness_level"),
-            form.get("skills"),
-            form.get("health_issues"),
-            form.get("target_unit"),
-            form.get("unit_free_text"),
+            form["full_name"].strip(),
+            form["email"].strip(),
+            password,
+            int(form["age"]),
+            form["gender"]
         ))
         conn.commit()
+        new_user_id = cursor.lastrowid
         conn.close()
 
-        return render_template(
-            "register.html",
-            success=True,
-            form_data=form
-        )
+        session["user_id"] = new_user_id
+        session["user_name"] = form["full_name"]
 
-    return render_template("register.html", success=False, form_data=None)
+        return redirect(url_for("first_choice"))
 
+    return render_template("register.html")
 
 
-# אופציונלי: עמוד קטן לראות את כל ההרשמות (development בלבד)
+@app.route("/first-choice", methods=["GET", "POST"])
+def first_choice():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session.get("user_id")
+    conn = get_db_connection()
+
+    if request.method == "POST":
+        category = request.form.get("category")
+        conn.execute("UPDATE registrations SET category = ? WHERE id = ?", (category, user_id))
+        conn.commit()
+        conn.close()
+        return redirect(url_for("home"))
+
+    user = conn.execute("SELECT * FROM registrations WHERE id = ?", (user_id,)).fetchone()
+    conn.close()
+
+    return render_template("firstChoice.html", user=user)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    print("hi")
+    error = None
+    if request.method == 'POST':
+        form = request.form
+        full_name = form.get("full_name", "").strip()
+        password = form.get("password", "").strip()
+
+        print("\n\n\n\n\n" + full_name)
+
+        # שליפת משתמש לפי שם מדויק (ללא LOWER)
+        conn = get_db_connection()
+        user = conn.execute(
+            "SELECT * FROM registrations WHERE full_name = ?",
+            (full_name,)
+        ).fetchone()
+        conn.close()
+
+        # בדיקת סיסמה נקייה מול סיסמה נקייה
+        if user and user["password"].strip() == password:
+            session["user_id"] = user["id"]
+            session["user_name"] = user["full_name"]
+            return redirect(url_for("first_choice"))
+        else:
+            error = True
+
+    return render_template("login.html", error=error)
+
+
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect(url_for("home"))
+
+
 @app.route("/admin/registrations")
 def admin_registrations():
     conn = get_db_connection()
-    rows = conn.execute("SELECT * FROM registrations ORDER BY created_at DESC").fetchall()
+    rows = conn.execute("SELECT * FROM registrations").fetchall()
     conn.close()
 
-    html_rows = []
-    for r in rows:
-        html_rows.append(
-            f"<li>{r['created_at']} – {r['full_name']} ({r['email']}), גיל {r['age']}, יחידה: {r['target_unit']}</li>"
-        )
+    html_rows = [
+        f"<li>{r['id']} — {r['full_name']} — {r['email']} — קטגוריה: {r['category']}</li>"
+        for r in rows
+    ]
+
     return "<h2>הרשמות</h2><ul>" + "".join(html_rows) + "</ul>"
 
 
 if __name__ == "__main__":
-    init_db()  # מוודא שהטבלה קיימת לפני שמריצים את השרת
+    init_db()
     app.run(debug=True)
