@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+
+{% block title %}בחר תפקיד וצור סדר עדיפויות{% endblock %}
+
+{% block content %}
+<section class="form-page">
+    <div class="container">
+
+        <h1 class="form-title">בחר תפקיד וצור סדר עדיפויות</h1>
+        <p class="form-subtitle">
+            בחר את סדר העדיפויות שלך עבור התפקידים מתוך האפשרויות המוצגות.
+        </p>
+
+        <form method="post">
+            <div class="register-form">
+                <div class="form-group full-width">
+                    <label>
+                        סדר עדיפויות <span class="required-star">*</span>
+                    </label>
+
+                    <div class="category-select">
+                        {% for role in roles %}
+                        <label class="category-option">
+                            <input type="radio" name="role_priority" value="{{ role }}" required>
+                            <span class="text">{{ role }}</span>
+                        </label>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="btn primary-btn" style="margin-top: 1.4rem;">
+                לשלב הבא
+            </button>
+        </form>
+
+    </div>
+</section>
+{% endblock %}
