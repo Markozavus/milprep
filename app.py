@@ -237,7 +237,7 @@ def third_selection():
         # העברה לעמוד "results"
         return redirect(url_for("results"))
 
-    return render_template("thirdSelection.html", roles=roles)
+    return render_template("questionary.html", roles=roles)
 
 
 
@@ -250,6 +250,12 @@ def results():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+
+
+@app.route("/questionary")
+def questionary():
+    return render_template("questionary.html")
 
 
 
