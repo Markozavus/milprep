@@ -258,6 +258,11 @@ def questionary():
     return render_template("questionary.html")
 
 
+@app.route("/communication")
+def communication():
+    return render_template("communication.html")
+
+
 
 
 
