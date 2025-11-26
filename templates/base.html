@@ -41,8 +41,10 @@
             {% if not session.get('user_id') %}
                 <a href="{{ url_for('login') }}">התחברות</a>
                 <a href="{{ url_for('register') }}">הרשמה</a>
-            {% else %}
+            {% elif session.get('user_id') %}
                 <a href="{{ url_for('first_choice') }}">הפרופיל שלי</a>
+            {% else %}
+                <a href="{{ url_for('about') }}">אודות</a>
             {% endif %}
         </nav>
 
@@ -50,8 +52,10 @@
         <div class="user-greeting">
             <span>שלום, {{ session['user_name'] }}!</span>
             <a href="{{ url_for('logout') }}">התנתק</a>
+            
         </div>
-        {% endif %}
+        {%endif%}
+        
 
     </div>
 </header>
