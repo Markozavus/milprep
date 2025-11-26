@@ -247,6 +247,11 @@ def results():
     return render_template("results.html")
 
 
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
 
 
 
