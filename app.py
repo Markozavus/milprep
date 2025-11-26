@@ -16,7 +16,6 @@ def get_db_connection():
     conn.row_factory = sqlite3.Row
     return conn
 
-
 def init_db():
     conn = get_db_connection()
     conn.execute("""
@@ -28,11 +27,16 @@ def init_db():
             password TEXT NOT NULL,
             age INTEGER,
             gender TEXT,
-            category TEXT
+            category TEXT,
+            sub_category TEXT,
+            role_priority TEXT  -- הוספת העמודה החדשה
         )
     """)
     conn.commit()
     conn.close()
+
+
+
 
 
 # ---------- Routes ----------
@@ -107,15 +111,143 @@ def first_choice():
 
     if request.method == "POST":
         category = request.form.get("category")
+        # עדכון קטגוריה בבסיס הנתונים
         conn.execute("UPDATE registrations SET category = ? WHERE id = ?", (category, user_id))
         conn.commit()
         conn.close()
-        return redirect(url_for("home"))
+
+        # נווט לעמוד הבא (second-choice)
+        return redirect(url_for("second_choice"))
 
     user = conn.execute("SELECT * FROM registrations WHERE id = ?", (user_id,)).fetchone()
     conn.close()
 
     return render_template("firstChoice.html", user=user)
+
+
+
+@app.route("/second-choice", methods=["GET", "POST"])
+def second_choice():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session.get("user_id")
+    conn = get_db_connection()
+
+    # שליפת הקטגוריה שבחר המשתמש בעמוד הראשון
+    user = conn.execute("SELECT * FROM registrations WHERE id = ?", (user_id,)).fetchone()
+    selected_category = user["category"]
+    options = []
+
+    # הצגת האפשרויות לפי הקטגוריה
+    if selected_category == "technology":
+        options = ['פיזיקה', 'מתמטיקה', 'מדעי המחשב']
+    elif selected_category == "warfare":
+        options = ['חיל רגלים', 'טיס', 'שייטת']
+    elif selected_category == "Fighting supporters":
+        options = ['מנהלה ושלישות', 'שיטור', 'תפקידי אבטחה']
+    elif selected_category == "communication":
+        options = ['ייצור תוכן', 'תשתית וטכנולוגיה', 'מערכות מידע']
+    elif selected_category == "logistics":
+        options = ['הכשרת כוח אדם', 'מערך ההובלה', 'הכנה לחירום']
+    else:
+        options = []  # אם אין קטגוריה מוגדרת או שיש קטגוריה לא ידועה
+
+    if request.method == "POST":
+        sub_category = request.form.get("sub_category")
+        
+        # עדכון הבחירה של תת-הקטגוריה בבסיס הנתונים
+        conn.execute("UPDATE registrations SET sub_category = ? WHERE id = ?", (sub_category, user_id))
+        conn.commit()
+        conn.close()
+
+        # נווט לעמוד הבא (third-choice)
+        return redirect(url_for("third_selection"))
+
+    conn.close()
+    return render_template("secondSelection.html", options=options)
+
+
+
+@app.route("/third-selection", methods=["GET", "POST"])
+def third_selection():
+    if "user_id" not in session:
+        return redirect(url_for("login"))
+
+    user_id = session.get("user_id")
+    conn = get_db_connection()
+
+    # שליפת הקטגוריה ותת-הקטגוריה שבחר המשתמש
+    user = conn.execute("SELECT * FROM registrations WHERE id = ?", (user_id,)).fetchone()
+    selected_category = user["category"]
+    selected_sub_category = user["sub_category"]
+    roles = []
+
+    # הצגת 5 תפקידי צה"ל על פי תת-הקטגוריה שנבחרה
+    if selected_category == "technology":
+        if selected_sub_category == "מדעי המחשב":
+            roles = ['מפתח תוכנה', 'מנהל פרויקטים טכנולוגיים', 'מתכנתי בינה מלאכותית', 'מהנדס תוכנה', 'מנהל צוות פיתוח']
+        elif selected_sub_category == "פיזיקה":
+            roles = ['פיזיקאי', 'מהנדס אלקטרוניקה', 'חוקר טכנולוגיות חדשות', 'מתכנתי מערכות צבאיות', 'מנהל צוות מחקר']
+        elif selected_sub_category == "מתמטיקה":
+            roles = ['מתמטיקאי צבאי', 'מהנדס מתמטי', 'חוקר שיטות חישוב', 'מתכנתי סימולציות', 'אנליסט טכנולוגי']
+    elif selected_category == "warfare":
+        if selected_sub_category == "חיל רגלים":
+            roles = ['לוחם', 'מפקד צוות', 'מפקד מחלקה', 'מדריך קרב מגע', 'מפקד פלוגה']
+        elif selected_sub_category == "טיס":
+            roles = ['טייס', 'מפקד טייסת', 'נווט', 'מפקד סוללה', 'חוקר טיס']
+        elif selected_sub_category == "שייטת":
+            roles = ['לוחם שייטת', 'מפקד יחידה', 'חוקר צלילה', 'מדריך קרב ימי', 'מפקד צוות ים']
+    elif selected_category == "Fighting supporters":
+        if selected_sub_category == "מנהלה ושלישות":
+            roles = ['שליש', 'מנהל צוות לוגיסטי', 'מנהל רישום חיילים', 'יועץ לוגיסטי', 'מנהל אבטחת מידע']
+        elif selected_sub_category == "שיטור":
+            roles = ['שוטר צבאי', 'מפקד תחנה', 'מפקד צוות', 'חוקר שיטור', 'מנהל תיקי חקירה']
+        elif selected_sub_category == "תפקידי אבטחה":
+            roles = ['מאבטח מתקנים', 'מנהל אבטחה', 'חוקר אירועים', 'מפקד צוות אבטחה', 'מנהל אבטחת מידע']
+    elif selected_category == "communication":
+        if selected_sub_category == "ייצור תוכן":
+            roles = ['עורך תוכן', 'מפיק', 'מנהל תוכן', 'תסריטאי', 'מנהל פרויקטים יצירתיים']
+        elif selected_sub_category == "תשתית וטכנולוגיה":
+            roles = ['מנהל רשתות', 'מפתח אינטרנט', 'מנהל מערכת', 'אנליסט טכנולוגי', 'מנהל אבטחת מידע']
+        elif selected_sub_category == "מערכות מידע":
+            roles = ['מנהל פרויקט IT', 'מפתח מערכות מידע', 'מנהל מסד נתונים', 'אנליסט מערכות', 'מפתח אפליקציות']
+    elif selected_category == "logistics":
+        if selected_sub_category == "הכשרת כוח אדם":
+            roles = ['מדריך לוחמים', 'מנהל הכשרה טכנולוגית', 'מנהל צוות הכשרה', 'מאמן קרב מגע', 'מדריך חירום']
+        elif selected_sub_category == "מערך ההובלה":
+            roles = ['מוביל חיילים', 'מנהל שינוע', 'מפקד צוות הובלה', 'מנהל תחבורה', 'אחראי ציוד']
+        elif selected_sub_category == "הכנה לחירום":
+            roles = ['מפקד חירום', 'מנהל תחום חירום', 'מפקד יחידת חירום', 'מאמן חירום', 'מנהל ציוד חירום']
+
+    conn.close()
+
+    if request.method == "POST":
+        # קבלת סדר העדיפויות מה-form
+        priority_order = request.form.get("roles_order")  # כאן מתקבל סדר התפקידים ב-JSON
+
+        # עדכון סדר העדיפויות בבסיס הנתונים
+        conn = get_db_connection()
+        conn.execute("UPDATE registrations SET role_priority = ? WHERE id = ?", (priority_order, user_id))
+        conn.commit()
+        conn.close()
+
+        # העברה לעמוד "results"
+        return redirect(url_for("results"))
+
+    return render_template("thirdSelection.html", roles=roles)
+
+
+
+
+@app.route("/results")
+def results():
+    return render_template("results.html")
+
+
+
+
+
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -125,7 +257,6 @@ def login():
         form = request.form
         full_name = form.get("full_name", "").strip()
         password = form.get("password", "").strip()
-
 
         # שליפת משתמש לפי שם מדויק (ללא LOWER)
         conn = get_db_connection()
@@ -165,6 +296,30 @@ def admin_registrations():
 
     return "<h2>הרשמות</h2><ul>" + "".join(html_rows) + "</ul>"
 
+
+def next_selection(request):
+    # קבלת הקטגוריה שבחר המשתמש מה-SESSION
+    selected_category = request.session.get('selected_category')
+
+    # הכנה של האפשרויות המתאימות לכל קטגוריה
+    if selected_category == 'technology':
+        options = ['פיזיקה', 'מתמטיקה', 'מדעי המחשב']
+    elif selected_category == 'warfare':
+        options = ['חיל רגלים', 'טיס', 'שייטת']
+    else:
+        options = []  # אם אין קטגוריה מוגדרת או שיש קטגוריה לא ידועה
+
+    return render(request, 'next_selection.html', {'options': options})
+
+
+def final_page(request):
+    selected_category = request.session.get('selected_category')
+    selected_sub_category = request.session.get('selected_sub_category')
+
+    return render(request, 'final_page.html', {
+        'selected_category': selected_category,
+        'selected_sub_category': selected_sub_category
+    })
 
 if __name__ == "__main__":
     init_db()
