@@ -27,6 +27,7 @@ def init_db():
             password TEXT NOT NULL,
             age INTEGER,
             gender TEXT,
+            city TEXT,
             category TEXT,
             sub_category TEXT,
             role_priority TEXT  -- הוספת העמודה החדשה
@@ -79,15 +80,16 @@ def register():
         conn = get_db_connection()
         cursor = conn.execute("""
             INSERT INTO registrations
-            (created_at, full_name, email, password, age, gender)
-            VALUES (?, ?, ?, ?, ?, ?)
+            (created_at, full_name, email, password, age, gender, city)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         """, (
             datetime.utcnow().isoformat(timespec="seconds"),
             form["full_name"].strip(),
             form["email"].strip(),
             password,
             int(form["age"]),
-            form["gender"]
+            form["gender"],
+            form["city"]
         ))
         conn.commit()
         new_user_id = cursor.lastrowid
@@ -143,7 +145,7 @@ def second_choice():
     if selected_category == "technology":
         options = ['פיזיקה', 'מתמטיקה', 'מדעי המחשב']
     elif selected_category == "warfare":
-        options = ['חיל רגלים', 'טיס', 'שייטת']
+        options = ['חיל רגלים', 'חיל הים', 'חיל האוויר']
     elif selected_category == "Fighting supporters":
         options = ['מנהלה ושלישות', 'שיטור', 'תפקידי אבטחה']
     elif selected_category == "communication":
@@ -193,11 +195,11 @@ def third_selection():
             roles = ['מתמטיקאי צבאי', 'מהנדס מתמטי', 'חוקר שיטות חישוב', 'מתכנתי סימולציות', 'אנליסט טכנולוגי']
     elif selected_category == "warfare":
         if selected_sub_category == "חיל רגלים":
-            roles = ['לוחם', 'מפקד צוות', 'מפקד מחלקה', 'מדריך קרב מגע', 'מפקד פלוגה']
-        elif selected_sub_category == "טיס":
-            roles = ['טייס', 'מפקד טייסת', 'נווט', 'מפקד סוללה', 'חוקר טיס']
-        elif selected_sub_category == "שייטת":
-            roles = ['לוחם שייטת', 'מפקד יחידה', 'חוקר צלילה', 'מדריך קרב ימי', 'מפקד צוות ים']
+            roles = ['גולני', 'גבעתי', 'נח"ל', 'צנחנים', 'הנדסה קרבית']
+        elif selected_sub_category == "חיל האוויר":
+            roles = ['שלדג', '669', 'טייס', 'טייס מסוק','הגנה אווירית']
+        elif selected_sub_category == "חיל הים":
+            roles = ['שייטת 13', 'חובלים', 'שייטת 3 ', 'שירות בצוללות', 'משמר הגבולות הימיות']
     elif selected_category == "Fighting supporters":
         if selected_sub_category == "מנהלה ושלישות":
             roles = ['שליש', 'מנהל צוות לוגיסטי', 'מנהל רישום חיילים', 'יועץ לוגיסטי', 'מנהל אבטחת מידע']
