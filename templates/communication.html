@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}תוצאות הבחירה{% endblock %}
+
+{% block content %}
+<section class="calendar-section">
+    <div class="container">
+        <h2 class="calendar-title">איש אינו לבד!</h2>
+
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>אנשים בתקפיד דומה</th>
+                    <th>אימייל</th>
+
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr>
+                    <td class="day">נועה שלוסברג</td>
+                    <td class="day">noaShlusush@gmail.com</td>
+                </tr>
+                <tr>
+                    <td>עומר פרגי</td>
+                    <td>TheKingFaragi@gmail.com</td>
+                </tr>
+                <tr>
+                    <td>נאור 👑</td>
+                    <td>naroDont@gmail.com</td>
+                </tr>
+                <tr>
+                    <td>מר מיכאל צארני</td>
+                    <td>barIlanIsTheBest@gmail.com</td>
+                </tr>
+
+            </table>
+
+
+                <a href="{{ url_for('results') }}" class="btn primary-btn">
+                    חזור
+                </a>
+
+
+
+
+    </div>
+</section>
+
+{% endblock %}
