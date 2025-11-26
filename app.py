@@ -120,7 +120,6 @@ def first_choice():
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
-    print("hi")
     error = None
     if request.method == 'POST':
         form = request.form
