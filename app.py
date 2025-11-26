@@ -126,7 +126,6 @@ def login():
         full_name = form.get("full_name", "").strip()
         password = form.get("password", "").strip()
 
-        print("\n\n\n\n\n" + full_name)
 
         # שליפת משתמש לפי שם מדויק (ללא LOWER)
         conn = get_db_connection()
